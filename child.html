@@ -1,0 +1,28 @@
+<script>
+function stringifyCircular(obj) {
+  const cache = new Set();
+
+  return JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.has(value)) {
+        // Remove circular reference.
+        return;
+      }
+      cache.add(value);
+    }
+    return value;
+  });
+}
+
+function handleDataLayerPush(data) {
+  window.parent.postMessage(stringifyCircular({'message' : 'dataLayerChildPush', 'data' : data}), "*");
+}
+
+window.dataLayer = window.dataLayer || [];
+const originalDataLayerPush = window.dataLayer.push;
+window.dataLayer.push = function() {
+  const pushResult = originalDataLayerPush.apply(this, arguments); 
+  handleDataLayerPush(arguments[0]);
+  return pushResult;
+};
+</script>

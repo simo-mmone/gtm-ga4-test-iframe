@@ -1,0 +1,26 @@
+<script>
+    function handleMessage(event) {
+        // Check the origin of the message for security reasons
+        if (event.origin !== "https://reservation.bookingone.it") {
+            return;
+        }
+
+
+        try {
+            var data = JSON.parse(event.data);
+            if (
+                data.message && 
+                data.message === "dataLayerChildPush" && 
+                data.data
+            ) {
+                if (dataLayer) {
+                    dataLayer.push(data.data);
+                }                    
+            }
+        } catch (e) {
+            return;
+        }
+    }
+
+    window.addEventListener("message", handleMessage, false);
+</script>
