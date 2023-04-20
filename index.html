@@ -35,10 +35,7 @@
 
         function handleMessage(event) {
             // Check the origin of the message for security reasons
-            if (
-                event.origin !== "https://reservation.bookingone.it" ||
-                event.origin !== "https://reservation.abs.tmp"    
-            ) {
+            if (event.origin !== "https://reservation.bookingone.it") {
                 return;
             }
 
@@ -50,7 +47,6 @@
                     data.message === "dataLayerChildPush" && 
                     data.data
                 ) {
-                    console.log('parent: ', data.data);
                     if (dataLayer) {
                         dataLayer.push(data.data);
                     }                    
