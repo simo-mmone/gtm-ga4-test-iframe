@@ -20,6 +20,19 @@
     
 
     <script>
+        function findGetParameter(parameterName) {
+            var result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+
         function handleMessage(event) {
             // Check the origin of the message for security reasons
             if (event.origin !== "https://reservation.bookingone.it") {
@@ -41,6 +54,11 @@
             } catch (e) {
                 return;
             }
+        }
+
+        const is_local = findGetParameter('local');
+        if (is_local == 'yes') {
+            document.getElementById('bookingframe_internal').src = 'https://reservation.abs.tmp/RES/2/indexabs.php?lg=it&amp;booking_type=R&amp;booking_style=https%3A%2F%2Freservation.cmsone.it%2Fcustom%2Fbooking%2Fcss%2Fstandard_EB_byroom.css&amp;stid=1&amp;pid=1&amp;debug=0&amp;step2=1&amp;checkin=06-04-2023&amp;checkout=07-04-2023&amp;numPax=0&amp;numRooms=1&amp;reqRooms=YToxOntpOjE7YToyOntzOjY6ImFkdWx0cyI7czoxOiIyIjtzOjU6ImNoaWxkIjtzOjE6IjAiO319&amp;CRO=0';
         }
 
         window.addEventListener("message", handleMessage, false);
